@@ -1,5 +1,7 @@
 import json
 import os
+from App.node import Node
+from App.element import Element
 
 
 def load_from_json(file):
@@ -22,58 +24,40 @@ class Properties:
         self.nL = data["nL"]
 
 
-class Node:
-    def __init__(self, x_cord, y_cord, temp):
-        self.x = x_cord
-        self.y = y_cord
-        self.t = temp
-
-
-class Element:
-    def __init__(self, a, b, c, d):
-        self.id = [a, b, c, d]
-
-    def __getitem__(self, index):
-        return self.id[index]
-
-    def __setitem__(self, index, value):
-        self.id[index] = value
-
 
 class Grid:
       def __init__(self):
         property = Properties()
         # temperatura startowa, moze sie pojawic w configu!
         starting_tmp = 0;
-        self.nH=property.nH
+        self.nH = property.nH
         self.nL=property.nL
         delta_H = property.H/property.nH
         delta_L = property.L/property.nL
 
         self.nodes = []
-        x = 0
         i = 0
-
-        while i < property.H:
+        x = 0
+        y = 0
+        while i <= property.nL-1:
             j = 0
             y = 0
-            while j < property.L:
+            while j <= property.nH-1:
                 self.nodes.append(Node(x, y, starting_tmp))
-                j = j + delta_L
-                y = y + 1
-            i = i + delta_H
-            x = x + 1
+                y = y + delta_H
+                j = j + 1
+            x = x + delta_L
+            i = i + 1
 
         self.elements = []
 
-        i = 0
         for i in range(0, property.nL-1):
             vertex_a = self.nH * i
             vertex_b = 7 * i + self.nH
             vertex_c = vertex_b + 1
             vertex_d = vertex_a + 1
             for j in range(0, property.nH-1):
-                element = Element(vertex_a, vertex_b, vertex_c, vertex_d)
+                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d])
                 self.elements.append(element)
                 vertex_a = vertex_d
                 vertex_b = vertex_c
@@ -85,10 +69,8 @@ class Grid:
         self.print_elements()
 
       def print_nodes(self):
-        i = 0
         for node in self.nodes:
-            print(str(i)+"\t\t"+str(node.x) +" "+ str(node.y)+" "+str(node.t))
-            i += 1
+            print(node)
 
 
       def print_elements(self):
