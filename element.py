@@ -14,6 +14,7 @@ class Element:
         self.dn_dx = []
         self.dn_dy = []
         self.points_matrixes = []
+        self.four_points_matrixes = []
         self.matrix_H = []
 
     def __getitem__(self, index):
@@ -109,14 +110,14 @@ class Element:
         print(self.matrix)
 
     def create_matrix_dn_dx(self):
-        self.dn_dx = np.arange(1.0, 17.0).reshape(4, 4)
+        self.dn_dx = np.zeros((4, 4))
         for i in range(0, 4):
             for j in range(0, 4):
                 self.dn_dx[i, j] = self.matrix[0, i] * App.func.N_d_KSI_t[i, j] + self.matrix[1, i] * App.func.N_d_ETA_t[i, j]
         # print(self.dn_dx)
 
     def create_matrix_dn_dy(self):
-        self.dn_dy = np.arange(1., 17.).reshape(4, 4)
+        self.dn_dy = np.zeros((4, 4))
         for i in range(0, 4):
             for j in range(0, 4):
                 self.dn_dy[i, j] = self.matrix[2, i] * App.func.N_d_KSI_t[i, j] + self.matrix[3, i] * App.func.N_d_ETA_t[i, j]
@@ -133,3 +134,19 @@ class Element:
             col = row
             result = np.outer(row, col)
             self.points_matrixes.append(result)
+
+
+    def point_matrixes_det(self):
+        for i in range(0,4):
+            self.points_matrixes[i] = self.points_matrixes[i] * self.dets[i]
+            self.points_matrixes[i+4] = self.points_matrixes[i + 4] * self.dets[i]
+
+    def merge_two_matrixes(self, K):
+        for i in range(0, 4):
+            self.four_points_matrixes.append(np.add(self.points_matrixes[i], self.points_matrixes[i + 4]))
+            self.four_points_matrixes[i] = self.four_points_matrixes[i] * K
+
+    def create_matrix_h(self):
+        self.matrix_H = np.zeros((4, 4))
+        for matrix in self.four_points_matrixes:
+            self.matrix_H = self.matrix_H + matrix

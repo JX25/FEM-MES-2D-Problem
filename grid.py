@@ -22,6 +22,7 @@ class Properties:
         self.L = data["L"]
         self.nH = data["nH"]
         self.nL = data["nL"]
+        self.K = data["K"]
 
 
 

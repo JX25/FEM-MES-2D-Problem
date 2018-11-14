@@ -15,12 +15,14 @@ if __name__ == '__main__':
     points.append(Node(0, 0.025, 0))
     element = Element(0, 1, 2, 3, points[0], points[1], points[2], points[3])
     element.create_matrix()
-    print(element.matrix)
-    print(element.matrix_d_ksi_d_eta)
-    print(element.dets)
+
 
     element.create_matrix_dn_dx()
     element.create_matrix_dn_dy()
     element.create_point_matrixes()
 
+    element.point_matrixes_det()
+    element.merge_two_matrixes(30)
+    element.create_matrix_h()
 
+    print(element.matrix_H)
