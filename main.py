@@ -1,28 +1,17 @@
 from App.grid import Grid
-# =================================
 from App.element import Element
 from App.node import Node
 
-
 if __name__ == '__main__':
     mes_grid = Grid()
-    print("================\n")
 
-    points = []
-    points.append(Node(0, 0, 0))
-    points.append(Node(0.025, 0, 0))
-    points.append(Node(0.025, 0.025, 0))
-    points.append(Node(0, 0.025, 0))
-    element = Element(0, 1, 2, 3, points[0], points[1], points[2], points[3])
-    element.create_matrix()
+    points = [Node(0, 0, 0), Node(0.025, 0, 0), Node(0.025, 0.025, 0), Node(0, 0.025, 0)]
+    element = Element(0, 1, 2, 3, points[0], points[1], points[2], points[3], 30, 700, 7800)
 
-
-    element.create_matrix_dn_dx()
-    element.create_matrix_dn_dy()
-    element.create_point_matrixes()
-
-    element.point_matrixes_det()
-    element.merge_two_matrixes(30)
     element.create_matrix_h()
+    element.create_matrix_c()
 
-    print(element.matrix_H)
+
+
+
+
