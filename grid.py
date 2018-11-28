@@ -23,7 +23,8 @@ class Properties:
         self.nH = data["nH"]
         self.nL = data["nL"]
         self.K = data["K"]
-
+        self.C = data["C"]
+        self.Ro = data["Ro"]
 
 
 class Grid:
@@ -39,7 +40,6 @@ class Grid:
         self.nodes = []
         i = 0
         x = 0
-        y = 0
         while i <= property.nL-1:
             j = 0
             y = 0
@@ -58,16 +58,16 @@ class Grid:
             vertex_c = vertex_b + 1
             vertex_d = vertex_a + 1
             for j in range(0, property.nH-1):
-                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d])
+                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d], property.K, property.C, property.Ro)
                 self.elements.append(element)
                 vertex_a = vertex_d
                 vertex_b = vertex_c
                 vertex_c = vertex_b + 1
                 vertex_d = vertex_a + 1
 
-        self.print_nodes()
-        print("====")
-        self.print_elements()
+        #self.print_nodes()
+        #print("====")
+        #self.print_elements()
 
       def print_nodes(self):
         for node in self.nodes:

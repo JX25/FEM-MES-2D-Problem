@@ -1,8 +1,5 @@
 import math
-
 import numpy as np
-
-from App.node import Node
 
 
 def n1(ksi, eta):
@@ -69,15 +66,25 @@ for i in range(0, 4):
     N3.append(n3(KSI[i], ETA[i]))
     N4.append(n4(KSI[i], ETA[i]))
 
+
+N1xN1 = np.outer(N1, N1)
+N2xN2 = np.outer(N2, N2)
+N3xN3 = np.outer(N3, N3)
+N4xN4 = np.outer(N4, N4)
+
+Nx_x_Nx = []
+Nx_x_Nx.append(N1xN1)
+Nx_x_Nx.append(N2xN2)
+Nx_x_Nx.append(N3xN3)
+Nx_x_Nx.append(N4xN4)
+
+print(N1xN1)
+
 N = []
 N.append(N1)
 N.append(N2)
 N.append(N3)
 N.append(N4)
-
-# for row in N:
-#    print(str(row) + "\n")
-
 
 N1_d_KSI = []
 N2_d_KSI = []
@@ -100,7 +107,6 @@ for i in range(0, 4):
     N3_d_ETA.append(n3_d_eta(KSI[i]))
     N4_d_ETA.append(n4_d_eta(KSI[i]))
 
-
 N_d_KSI = []
 N_d_ETA = []
 
@@ -110,16 +116,39 @@ N_d_KSI.append(N3_d_KSI);
 N_d_KSI.append(N4_d_KSI);
 N_d_KSI = np.asmatrix(N_d_KSI)
 
-
 N_d_ETA.append(N1_d_ETA);
 N_d_ETA.append(N2_d_ETA);
 N_d_ETA.append(N3_d_ETA);
 N_d_ETA.append(N4_d_ETA);
 N_d_ETA = np.asmatrix(N_d_ETA)
 
-
 N_d_KSI_t = np.transpose(N_d_KSI)
 N_d_ETA_t = np.transpose(N_d_ETA)
 
-print(N_d_KSI_t)
-print(N_d_ETA_t)
+#print(N_d_KSI_t)
+#print(N_d_ETA_t)
+
+# print(N_d_ETA)
+# print(N_d_KSI)
+# print(str(KSI))
+# print(str(ETA))
+# print("\n")
+# print(str(N1))
+# print(str(N2))
+# print(str(N3))
+# print(str(N4))
+# print("\n")
+# print(str(N1_d_KSI))
+# print(str(N2_d_KSI))
+# print(str(N3_d_KSI))
+# print(str(N4_d_KSI))
+# print("\n")
+# print(str(N1_d_ETA))
+# print(str(N2_d_ETA))
+# print(str(N3_d_ETA))
+# print(str(N4_d_ETA))
+# print("\n")
+# for N in N_d_ETA:
+#    print(str(N))
+#    print("\n")
+
