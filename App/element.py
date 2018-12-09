@@ -213,8 +213,7 @@ class Element:
         self.create_matrix_h_bc()
         for i in range(0, len(self.matrix_H)):
             for j in range(0, len(self.matrix_H)):
-                if self.matrix_h_bc[i, j] != 0:
-                    self.matrix_H[i, j] = self.matrix_h_bc[i, j]
+                self.matrix_H[i, j] = self.matrix_H[i, j] + self.matrix_h_bc[i, j]
 
 
     def multiply_points_matrix_c(self):
