@@ -2,6 +2,14 @@ import math
 import numpy as np
 
 
+def n1_1d(ksi):
+    return 0.5*(1-ksi)
+
+
+def n2_1d(ksi):
+    return 0.5*(1+ksi)
+
+
 def n1(ksi, eta):
     return 0.25*(1-ksi)*(1-eta)
 
@@ -50,6 +58,12 @@ def n4_d_eta(ksi):
     return 0.25*(1-ksi)
 
 
+def check_border_cond(node1, node2):
+    if node1.br == node2.br == 1:
+        return True
+    return False
+
+
 REV_SQRT3 = 1/math.sqrt(3)
 KSI = [-REV_SQRT3, REV_SQRT3, REV_SQRT3, -REV_SQRT3]
 ETA = [-REV_SQRT3, -REV_SQRT3, REV_SQRT3, REV_SQRT3]
@@ -72,19 +86,11 @@ N2xN2 = np.outer(N2, N2)
 N3xN3 = np.outer(N3, N3)
 N4xN4 = np.outer(N4, N4)
 
-Nx_x_Nx = []
-Nx_x_Nx.append(N1xN1)
-Nx_x_Nx.append(N2xN2)
-Nx_x_Nx.append(N3xN3)
-Nx_x_Nx.append(N4xN4)
+Nx_x_Nx = [N1xN1, N2xN2, N3xN3, N4xN4]
 
 print(N1xN1)
 
-N = []
-N.append(N1)
-N.append(N2)
-N.append(N3)
-N.append(N4)
+N = [N1, N2, N3, N4]
 
 N1_d_KSI = []
 N2_d_KSI = []
@@ -110,16 +116,16 @@ for i in range(0, 4):
 N_d_KSI = []
 N_d_ETA = []
 
-N_d_KSI.append(N1_d_KSI);
-N_d_KSI.append(N2_d_KSI);
-N_d_KSI.append(N3_d_KSI);
-N_d_KSI.append(N4_d_KSI);
+N_d_KSI.append(N1_d_KSI)
+N_d_KSI.append(N2_d_KSI)
+N_d_KSI.append(N3_d_KSI)
+N_d_KSI.append(N4_d_KSI)
 N_d_KSI = np.asmatrix(N_d_KSI)
 
-N_d_ETA.append(N1_d_ETA);
-N_d_ETA.append(N2_d_ETA);
-N_d_ETA.append(N3_d_ETA);
-N_d_ETA.append(N4_d_ETA);
+N_d_ETA.append(N1_d_ETA)
+N_d_ETA.append(N2_d_ETA)
+N_d_ETA.append(N3_d_ETA)
+N_d_ETA.append(N4_d_ETA)
 N_d_ETA = np.asmatrix(N_d_ETA)
 
 N_d_KSI_t = np.transpose(N_d_KSI)

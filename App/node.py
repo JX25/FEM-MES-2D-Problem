@@ -1,10 +1,11 @@
 class Node:
-    def __init__(self, x_cord, y_cord, temp):
+    def __init__(self, x_cord, y_cord, temp, border):
         self.x = x_cord
         self.y = y_cord
         self.ksi = -1
         self.eta = -1
         self.t = temp
+        self.br = border
 
     def __str__(self):
         info = "X: " + str(round(self.x, 4)) + " Y:" + str(round(self.y, 4)) + "\n"
