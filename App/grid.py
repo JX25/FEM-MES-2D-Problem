@@ -25,6 +25,7 @@ class Properties:
         self.K = data["K"]
         self.C = data["C"]
         self.Ro = data["Ro"]
+        self.alfa = data["alfa"]
 
 
 class Grid:
@@ -44,7 +45,8 @@ class Grid:
             j = 0
             y = 0
             while j <= property.nH-1:
-                self.nodes.append(Node(x, y, starting_tmp))
+                border = self.is_border(i, j, property.nL - 1, property.nH - 1)
+                self.nodes.append(Node(x, y, starting_tmp,border))
                 y = y + delta_H
                 j = j + 1
             x = x + delta_L
@@ -58,7 +60,7 @@ class Grid:
             vertex_c = vertex_b + 1
             vertex_d = vertex_a + 1
             for j in range(0, property.nH-1):
-                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d], property.K, property.C, property.Ro)
+                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d], property.K, property.C, property.Ro, property.alfa)
                 self.elements.append(element)
                 vertex_a = vertex_d
                 vertex_b = vertex_c
@@ -69,10 +71,18 @@ class Grid:
         #print("====")
         #self.print_elements()
 
+      def is_border(self, x, y, max_x, max_y):
+          if x == max_x or y == max_y or x == 0 or y == 0:
+              return 1
+          return 0
+
+      def print_grid(self):
+        for node in self.nodes:
+          print(str(node.br))
+
       def print_nodes(self):
         for node in self.nodes:
             print(node)
-
 
       def print_elements(self):
         i = 0
