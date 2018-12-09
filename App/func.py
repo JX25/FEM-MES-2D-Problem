@@ -88,7 +88,16 @@ N4xN4 = np.outer(N4, N4)
 
 Nx_x_Nx = [N1xN1, N2xN2, N3xN3, N4xN4]
 
-print(N1xN1)
+# print(N1xN1)
+
+N1_1_1d = n1_1d(-REV_SQRT3)
+N2_1_1d = n2_1d(-REV_SQRT3)
+N1_2_1d = n1_1d(REV_SQRT3)
+N2_2_1d = n2_1d(REV_SQRT3)
+
+N_1_1d = [N1_1_1d, N2_1_1d]
+N_2_1d = [N1_2_1d, N2_2_1d]
+
 
 N = [N1, N2, N3, N4]
 

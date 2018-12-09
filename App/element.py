@@ -4,7 +4,7 @@ import App.func
 
 
 class Element:
-    def __init__(self, a, b, c, d, vertex1, vertex2, vertex3, vertex4, K, C, Ro):
+    def __init__(self, a, b, c, d, vertex1, vertex2, vertex3, vertex4, K, C, Ro, alfa):
         # initialize nodes, vertexes,
         self.nodes = [vertex1, vertex2, vertex3, vertex4]
         self.id = [a, b, c, d]
@@ -12,6 +12,7 @@ class Element:
         self.K = K
         self.C = C
         self.Ro = Ro
+        self.alfa = alfa
         # matrix h
         self.matrix_d_ksi_d_eta = []
         self.dets = []
@@ -30,6 +31,9 @@ class Element:
         # matrix c
         self.matrixs_points_c = []
         self.matrix_c = []
+
+        # matrix hbc
+        self.matrix_h_bc = []
 
 
     def __getitem__(self, index):
@@ -98,7 +102,7 @@ class Element:
         print(str(self.dets))
 
     def div_matrix(self):       # Dzieli kolumny macierzy dksi deta przez wyznaczniki 1<->4 4<->1 2<->-2 3<->3
-        m = np.asmatrix([[0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]])
+        m = np.zeros((4, 4))
         for i in range(0, 4):
             for j in range(0, 4):
                 if j == 0:
@@ -112,14 +116,14 @@ class Element:
             self.matrix = m
 
     def create_matrix_dn_dx(self):      # Tworzy macierz dN/dx
-        self.dn_dx = np.arange(1.0, 17.0).reshape(4, 4)
+        self.dn_dx = np.zeros((4, 4))
         for i in range(0, 4):
             for j in range(0, 4):
                 self.dn_dx[i, j] = self.matrix[0, i] * App.func.N_d_KSI_t[i, j] + self.matrix[1, i] * App.func.N_d_ETA_t[i, j]
         # print(self.dn_dx)
 
     def create_matrix_dn_dy(self):      #Tworzy macierz dN/dy
-        self.dn_dy = np.arange(1., 17.).reshape(4, 4)
+        self.dn_dy = np.zeros((4, 4))
         for i in range(0, 4):
             for j in range(0, 4):
                 self.dn_dy[i, j] = self.matrix[2, i] * App.func.N_d_KSI_t[i, j] + self.matrix[3, i] * App.func.N_d_ETA_t[i, j]
@@ -177,6 +181,41 @@ class Element:
         self.sum_point_matrixes()
         self.multiply_sum_matrixes()
         self.add_multiply_sum_matrixes()
+        # uwzglednienie warunkow brzegowych funkcja create_matrix_h_bc
+
+    def create_matrix_h_bc(self):
+        matrix_h_bc = np.zeros((4, 4))
+        matrix = np.outer(App.func.N_1_1d, App.func.N_1_1d) * self.alfa + np.outer(App.func.N_2_1d,
+                                                                                     App.func.N_2_1d) * self.alfa
+        # first wall
+        if App.func.check_border_cond(self.nodes[0], self.nodes[1]):
+            det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
+            matrix_h_bc[0:2, 0:2] = matrix_h_bc[0:2, 0:2] + matrix * det
+        # second wall
+        if App.func.check_border_cond(self.nodes[1], self.nodes[2]):
+            det = abs((self.nodes[2].y - self.nodes[1].y)/2.0)
+            matrix_h_bc[1:3, 1:3] = matrix_h_bc[1:3, 1:3] + matrix * det
+        # third wall
+        if App.func.check_border_cond(self.nodes[2], self.nodes[3]):
+            det = abs((self.nodes[3].x - self.nodes[2].x)/2.0)
+            matrix_h_bc[2:4, 2:4] = matrix_h_bc[2:4, 2:4] + matrix * det
+        # fourth wall
+        if App.func.check_border_cond(self.nodes[3], self.nodes[0]):
+            det = abs((self.nodes[3].y - self.nodes[0].y)/2.0)
+            matrix_h_bc[0, 0] = matrix_h_bc[0, 0] + matrix[0, 0] * det
+            matrix_h_bc[0, 3] = matrix_h_bc[0, 3] + matrix[0, 1] * det
+            matrix_h_bc[3, 0] = matrix_h_bc[3, 0] + matrix[1, 0] * det
+            matrix_h_bc[3, 3] = matrix_h_bc[3, 3] + matrix[1, 1] * det
+        self.matrix_h_bc = matrix_h_bc
+
+    def create_matrix_h_with_bc(self):
+        self.create_matrix_h()
+        self.create_matrix_h_bc()
+        for i in range(0, len(self.matrix_H)):
+            for j in range(0, len(self.matrix_H)):
+                if self.matrix_h_bc[i, j] != 0:
+                    self.matrix_H[i, j] = self.matrix_h_bc[i, j]
+
 
     def multiply_points_matrix_c(self):
         #  self.matrixs_points_c

@@ -25,6 +25,7 @@ class Properties:
         self.K = data["K"]
         self.C = data["C"]
         self.Ro = data["Ro"]
+        self.alfa = data["alfa"]
 
 
 class Grid:
@@ -59,7 +60,7 @@ class Grid:
             vertex_c = vertex_b + 1
             vertex_d = vertex_a + 1
             for j in range(0, property.nH-1):
-                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d], property.K, property.C, property.Ro)
+                element = Element(vertex_a, vertex_b, vertex_c, vertex_d, self.nodes[vertex_a], self.nodes[vertex_b], self.nodes[vertex_c], self.nodes[vertex_d], property.K, property.C, property.Ro, property.alfa)
                 self.elements.append(element)
                 vertex_a = vertex_d
                 vertex_b = vertex_c
