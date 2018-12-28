@@ -92,10 +92,18 @@ class Element:
         self.matrix_d_ksi_d_eta = np.asmatrix(np.array(self.matrix_d_ksi_d_eta))
 
     def count_dets(self):  # Obliczenie wyznacznikow z macierzy dksi deta
-        self.dets.append(self.matrix_d_ksi_d_eta[0, 0] * self.matrix_d_ksi_d_eta[3, 0] - self.matrix_d_ksi_d_eta[1, 0] * self.matrix_d_ksi_d_eta[2, 0])
-        self.dets.append(self.matrix_d_ksi_d_eta[0, 1] * self.matrix_d_ksi_d_eta[3, 1] - self.matrix_d_ksi_d_eta[1, 1] * self.matrix_d_ksi_d_eta[2, 1])
-        self.dets.append(self.matrix_d_ksi_d_eta[0, 2] * self.matrix_d_ksi_d_eta[3, 2] - self.matrix_d_ksi_d_eta[1, 2] * self.matrix_d_ksi_d_eta[2, 2])
-        self.dets.append(self.matrix_d_ksi_d_eta[0, 3] * self.matrix_d_ksi_d_eta[3, 3] - self.matrix_d_ksi_d_eta[1, 3] * self.matrix_d_ksi_d_eta[2, 3])
+        self.dets.append(self.matrix_d_ksi_d_eta[0, 0] * self.matrix_d_ksi_d_eta[3, 0] - self.matrix_d_ksi_d_eta[1, 0] *
+                         self.matrix_d_ksi_d_eta[2, 0])
+
+        self.dets.append(self.matrix_d_ksi_d_eta[0, 1] * self.matrix_d_ksi_d_eta[3, 1] - self.matrix_d_ksi_d_eta[1, 1] *
+                         self.matrix_d_ksi_d_eta[2, 1])
+
+        self.dets.append(self.matrix_d_ksi_d_eta[0, 2] * self.matrix_d_ksi_d_eta[3, 2] - self.matrix_d_ksi_d_eta[1, 2] *
+                         self.matrix_d_ksi_d_eta[2, 2])
+
+        self.dets.append(self.matrix_d_ksi_d_eta[0, 3] * self.matrix_d_ksi_d_eta[3, 3] - self.matrix_d_ksi_d_eta[1, 3] *
+                         self.matrix_d_ksi_d_eta[2, 3])
+
         self.dets = np.array(self.dets)
 
     def print_dets(self):
@@ -206,21 +214,19 @@ class Element:
             matrix_h_bc[0, 3] = matrix_h_bc[0, 3] + matrix[0, 1] * det
             matrix_h_bc[3, 0] = matrix_h_bc[3, 0] + matrix[1, 0] * det
             matrix_h_bc[3, 3] = matrix_h_bc[3, 3] + matrix[1, 1] * det
+        print(matrix_h_bc)
         self.matrix_h_bc = matrix_h_bc
 
     def create_matrix_h_with_bc(self):
         self.create_matrix_h()
-        self.create_matrix_h_bc()
-        for i in range(0, len(self.matrix_H)):
-            for j in range(0, len(self.matrix_H)):
-                self.matrix_H[i, j] = self.matrix_H[i, j] + self.matrix_h_bc[i, j]
+        #self.create_matrix_h_bc()
+       # self.matrix_H = np.add(self.matrix_h, self.matrix_h_bc) #  self.matrix_H[i, j] + self.matrix_h_bc[i, j]
 
 
     def multiply_points_matrix_c(self):
         #  self.matrixs_points_c
-        self.matrixs_points_c = App.func.Nx_x_Nx
         for i in range(0, 4):
-            self.matrixs_points_c[i] = np.array(self.matrixs_points_c[i]) * self.Ro * self.C * self.dets[i]
+            self.matrixs_points_c.append(np.array(App.func.Nx_x_Nx[i]) * self.Ro * self.C * self.dets[i])
 
     def add_points_matrix_c(self):
         self.matrix_c = np.zeros((4, 4))
