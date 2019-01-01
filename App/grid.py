@@ -3,16 +3,7 @@ import os
 from App.node import Node
 from App.element import Element
 import numpy as np
-
-
-def load_from_json(file):
-    try:
-        with open(file) as config:
-            data = json.load(config)
-        return data
-    except FileNotFoundError:
-        print("Nie znaleziono podanego pliku konfiguracyjnego!")
-        exit(-1)
+from App.func import load_from_json, time_step
 
 
 class Properties:
@@ -40,6 +31,7 @@ class Grid:
         delta_L = property.L / property.nL
         self.global_matrix_h = np.zeros((self.nL*self.nH, self.nH*self.nL))
         self.global_matrix_c = np.zeros((self.nL*self.nH, self.nH*self.nL))
+        self.global_vector_p = np.zeros((self.nL*self.nH, 1))
         self.nodes = []
         i = 0
         x = 0
@@ -67,6 +59,7 @@ class Grid:
                                   property.alfa)
                 element.create_matrix_h_with_bc()
                 element.create_matrix_c()
+                element.create_vector_p()
                 self.elements.append(element)
                 vertex_a = vertex_d
                 vertex_b = vertex_c
@@ -90,6 +83,18 @@ class Grid:
                 for j, jj in zip(element.id, range(0, 4)):
                     self.global_matrix_c[i, j] = self.global_matrix_c[i, j] + \
                                                                      element.matrix_c[ii, jj]
+
+    def create_global_vector_p(self):
+        for element in self.elements:
+            for i, ii in zip(element.id, range(0, 4)):
+                    self.global_vector_p[i] = self.global_vector_p[i] + \
+                                                                     element.vector_p[ii]
+
+    def compute_vector_p(self):
+        vector_t = [100  for i in range(16)]
+        result =  (self.global_matrix_c/time_step).dot(vector_t)
+        self.global_vector_p += result.reshape(16, 1)
+        print("SA")
 
     def is_border(self, x, y, max_x, max_y):
         if x == max_x or y == max_y or x == 0 or y == 0:

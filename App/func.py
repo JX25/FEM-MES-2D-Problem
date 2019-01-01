@@ -1,5 +1,33 @@
 import math
 import numpy as np
+import os
+import json
+
+def load_from_json(file):
+    try:
+        with open(file) as config:
+            data = json.load(config)
+        return data
+    except FileNotFoundError:
+        print("Nie znaleziono podanego pliku konfiguracyjnego!")
+        exit(-1)
+
+
+conf = os.getcwd() + "/config.json"
+data = load_from_json(conf)
+H = data["H"]
+L = data["L"]
+nH = data["nH"]
+nL = data["nL"]
+K = data["K"]
+C = data["C"]
+Ro = data["Ro"]
+alfa = data["alfa"]
+amb_temp = data["amb_temp"]
+time_step = data["time_step"]
+time = data["time"]
+temp_start = data["temp_start"]
+
 
 
 def n1_1d(ksi):
@@ -95,6 +123,7 @@ N2_1_1d = n2_1d(-REV_SQRT3)
 N1_2_1d = n1_1d(REV_SQRT3)
 N2_2_1d = n2_1d(REV_SQRT3)
 
+N1d = [N1_1_1d, N2_1_1d, N1_2_1d, N2_2_1d]
 N_1_1d = [N1_1_1d, N2_1_1d]
 N_2_1d = [N1_2_1d, N2_2_1d]
 

@@ -16,11 +16,14 @@ if __name__ == '__main__':
 
     mes_grid.create_global_matrix_h()
     mes_grid.create_global_matrix_c()
-    print(mes_grid.global_matrix_c)
+    mes_grid.create_global_vector_p()
+    mes_grid.compute_vector_p()
+    print(mes_grid.global_vector_p)
+
     #print(mes_grid.global_matrix_h)
 
-    for element in mes_grid.elements:
-        print(element.matrix_c)
+#    for element in mes_grid.elements:
+#        print(element.matrix_c)
 
     #  element.create_matrix_h_with_bc()
     #  print(element.matrix_H)

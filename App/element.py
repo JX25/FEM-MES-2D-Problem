@@ -13,27 +13,28 @@ class Element:
         self.C = C
         self.Ro = Ro
         self.alfa = alfa
-        # matrix h
+        # matrix
         self.matrix_d_ksi_d_eta = []
         self.dets = []
         self.matrix = []
         self.dn_dx = []
         self.dn_dy = []
         self.points_matrixes = []
-        self.matrix_H = []
         self.dndx_dndxt = []
         self.dndy_dndyt = []
         self.dndx_dndxt_det = []
         self.dndy_dndyt_det = []
+        # matrix h
         self.sum_point_matrix = []
         self.multiply_sum_matrix = []
-
+        self.matrix_H = []
         # matrix c
         self.matrixs_points_c = []
         self.matrix_c = []
-
         # matrix hbc
         self.matrix_h_bc = []
+        #vector p
+        self.vector_p = []
 
 
     def __getitem__(self, index):
@@ -138,7 +139,6 @@ class Element:
         # print(dn_dy)
 
     def create_point_matrixes(self):                # Tworzy punkty dla macierzy
-
         for row in self.dn_dx:                      # dla kazdego z punktow
             row = np.array(row)                     # {dN/dx} x {dN/dx}^T
             col = row                               # oraz
@@ -214,13 +214,13 @@ class Element:
             matrix_h_bc[0, 3] = matrix_h_bc[0, 3] + matrix[0, 1] * det
             matrix_h_bc[3, 0] = matrix_h_bc[3, 0] + matrix[1, 0] * det
             matrix_h_bc[3, 3] = matrix_h_bc[3, 3] + matrix[1, 1] * det
-        print(matrix_h_bc)
+        #print(matrix_h_bc)
         self.matrix_h_bc = matrix_h_bc
 
     def create_matrix_h_with_bc(self):
         self.create_matrix_h()
-        #self.create_matrix_h_bc()
-       # self.matrix_H = np.add(self.matrix_h, self.matrix_h_bc) #  self.matrix_H[i, j] + self.matrix_h_bc[i, j]
+        self.create_matrix_h_bc()
+        #self.matrix_H = np.add(self.matrix_h, self.matrix_h_bc) #  self.matrix_H[i, j] + self.matrix_h_bc[i, j]
 
 
     def multiply_points_matrix_c(self):
@@ -236,6 +236,14 @@ class Element:
     def create_matrix_c(self):
         self.multiply_points_matrix_c()
         self.add_points_matrix_c()
+        self.matrix_c = self.matrix_c / 0.5625
+
+
+    def create_vector_p(self):
+        self.vector_p = np.zeros((4, 1))
+        for i in (4):
+            self.vector_p = self.vector_p + App.func.alfa*np.asarray(App.func.N[i]).reshape(4,1)*App.func.amb_temp*self.dets[i]
+
 
 # print output
 
