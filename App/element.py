@@ -189,27 +189,33 @@ class Element:
         self.sum_point_matrixes()
         self.multiply_sum_matrixes()
         self.add_multiply_sum_matrixes()
+        self.create_matrix_h_bc()
         # uwzglednienie warunkow brzegowych funkcja create_matrix_h_bc
 
     def create_matrix_h_bc(self):
         matrix_h_bc = np.zeros((4, 4))
-        matrix = np.outer(App.func.N_1_1d, App.func.N_1_1d) * self.alfa + np.outer(App.func.N_2_1d,
-                                                                                     App.func.N_2_1d) * self.alfa
+        #det = 0
+        if abs((self.nodes[1].x - self.nodes[0].x)/2.0) != 0:
+            det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
+        else:
+            det = abs((self.nodes[1].y - self.nodes[0].y) / 2.0)
+        matrix = np.outer(App.func.N_1_1d, App.func.N_1_1d) + np.outer(App.func.N_2_1d, App.func.N_2_1d)
+        matrix *= 400#self.alfa
         # first wall
         if App.func.check_border_cond(self.nodes[0], self.nodes[1]):
-            det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
+            #det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
             matrix_h_bc[0:2, 0:2] = matrix_h_bc[0:2, 0:2] + matrix * det
         # second wall
         if App.func.check_border_cond(self.nodes[1], self.nodes[2]):
-            det = abs((self.nodes[2].y - self.nodes[1].y)/2.0)
+            #det = abs((self.nodes[2].y - self.nodes[1].y)/2.0)
             matrix_h_bc[1:3, 1:3] = matrix_h_bc[1:3, 1:3] + matrix * det
         # third wall
         if App.func.check_border_cond(self.nodes[2], self.nodes[3]):
-            det = abs((self.nodes[3].x - self.nodes[2].x)/2.0)
+            #det = abs((self.nodes[3].x - self.nodes[2].x)/2.0)
             matrix_h_bc[2:4, 2:4] = matrix_h_bc[2:4, 2:4] + matrix * det
         # fourth wall
         if App.func.check_border_cond(self.nodes[3], self.nodes[0]):
-            det = abs((self.nodes[3].y - self.nodes[0].y)/2.0)
+            #det = abs((self.nodes[3].y - self.nodes[0].y)/2.0)
             matrix_h_bc[0, 0] = matrix_h_bc[0, 0] + matrix[0, 0] * det
             matrix_h_bc[0, 3] = matrix_h_bc[0, 3] + matrix[0, 1] * det
             matrix_h_bc[3, 0] = matrix_h_bc[3, 0] + matrix[1, 0] * det
@@ -217,10 +223,6 @@ class Element:
         #print(matrix_h_bc)
         self.matrix_h_bc = matrix_h_bc
 
-    def create_matrix_h_with_bc(self):
-        self.create_matrix_h()
-        self.create_matrix_h_bc()
-        #self.matrix_H = np.add(self.matrix_h, self.matrix_h_bc) #  self.matrix_H[i, j] + self.matrix_h_bc[i, j]
 
 
     def multiply_points_matrix_c(self):
@@ -241,8 +243,13 @@ class Element:
 
     def create_vector_p(self):
         self.vector_p = np.zeros((4, 1))
-        for i in (4):
-            self.vector_p = self.vector_p + App.func.alfa*np.asarray(App.func.N[i]).reshape(4,1)*App.func.amb_temp*self.dets[i]
+        det = abs(self.nodes[0].x-self.nodes[1].x)
+        for i in range(0, 2):
+            for j in range(0, 4):
+                if App.func.check_border_cond(self.nodes[j], self.nodes[(j+1)%4]):
+                    self.vector_p[j] += App.func.N1_1d[i][j] + App.func.N2_1d[i][j]
+
+        self.vector_p *= App.func.amb_temp*App.func.alfa*det*(4/3)
 
 
 # print output

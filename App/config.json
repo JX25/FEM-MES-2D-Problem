@@ -7,7 +7,7 @@
   "C": 700,
   "Ro": 7800,
   "alfa": 300.0,
-  "temp_start": 100,
+  "temp_start": 100.0,
   "time": 500,
   "time_step": 50,
   "amb_temp": 1200

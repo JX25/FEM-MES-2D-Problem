@@ -123,7 +123,20 @@ N2_1_1d = n2_1d(-REV_SQRT3)
 N1_2_1d = n1_1d(REV_SQRT3)
 N2_2_1d = n2_1d(REV_SQRT3)
 
-N1d = [N1_1_1d, N2_1_1d, N1_2_1d, N2_2_1d]
+N1_1_1d_1 = n1_1d(-1)
+N1_1_1d_2 = n1_1d(1)
+
+N1_1d = [[n1_1d(1), 0, n1_1d(1), 0],
+       [0, n1_1d(1), 0, n1_1d(1)]]
+N2_1d = [[0, n2_1d(1), 0, n2_1d(1)],
+         [n2_1d(1), 0, n2_1d(1), 0]]
+
+#N1_1d = [[N1_1_1d_1, 0, N1_1_1d_1, 0],
+#       [0, N1_1_1d_1, 0, N1_1_1d_1]]
+
+#N2_1d =[[N1_1_1d_2, 0, N1_1_1d_2, 0],
+#       [0, N1_1_1d_2, 0, N1_1_1d_2]]
+
 N_1_1d = [N1_1_1d, N2_1_1d]
 N_2_1d = [N1_2_1d, N2_2_1d]
 
@@ -169,30 +182,4 @@ N_d_ETA = np.asmatrix(N_d_ETA)
 N_d_KSI_t = np.transpose(N_d_KSI)
 N_d_ETA_t = np.transpose(N_d_ETA)
 
-#print(N_d_KSI_t)
-#print(N_d_ETA_t)
-
-# print(N_d_ETA)
-# print(N_d_KSI)
-# print(str(KSI))
-# print(str(ETA))
-# print("\n")
-# print(str(N1))
-# print(str(N2))
-# print(str(N3))
-# print(str(N4))
-# print("\n")
-# print(str(N1_d_KSI))
-# print(str(N2_d_KSI))
-# print(str(N3_d_KSI))
-# print(str(N4_d_KSI))
-# print("\n")
-# print(str(N1_d_ETA))
-# print(str(N2_d_ETA))
-# print(str(N3_d_ETA))
-# print(str(N4_d_ETA))
-# print("\n")
-# for N in N_d_ETA:
-#    print(str(N))
-#    print("\n")
 
