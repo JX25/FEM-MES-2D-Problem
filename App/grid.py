@@ -28,8 +28,8 @@ class Grid:
         starting_tmp = temp_start;
         self.nH = property.nH
         self.nL = property.nL
-        delta_H = property.H / property.nH
-        delta_L = property.L / property.nL
+        delta_H = property.H / (property.nH-1)
+        delta_L = property.L / (property.nL-1)
         self.global_matrix_h = np.zeros((self.nL*self.nH, self.nH*self.nL))
         self.global_matrix_c = np.zeros((self.nL*self.nH, self.nH*self.nL))
         self.global_matrix_h_bc = np.zeros((self.nL*self.nH, self.nH*self.nL))

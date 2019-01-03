@@ -200,7 +200,7 @@ class Element:
         else:
             det = abs((self.nodes[1].y - self.nodes[0].y) / 2.0)
         matrix = np.outer(App.func.N_1_1d, App.func.N_1_1d) + np.outer(App.func.N_2_1d, App.func.N_2_1d)
-        matrix *= 400#self.alfa
+        matrix *= self.alfa
         # first wall
         if App.func.check_border_cond(self.nodes[0], self.nodes[1]):
             #det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
@@ -238,7 +238,7 @@ class Element:
     def create_matrix_c(self):
         self.multiply_points_matrix_c()
         self.add_points_matrix_c()
-        self.matrix_c = self.matrix_c / 0.5625
+        self.matrix_c = self.matrix_c
 
 
     def create_vector_p(self):
@@ -249,7 +249,7 @@ class Element:
                 if App.func.check_border_cond(self.nodes[j], self.nodes[(j+1)%4]):
                     self.vector_p[j] += App.func.N1_1d[i][j] + App.func.N2_1d[i][j]
 
-        self.vector_p *= App.func.amb_temp*App.func.alfa*det*(4/3)
+        self.vector_p *= App.func.amb_temp*App.func.alfa*det
 
 
 # print output
