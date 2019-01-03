@@ -5,7 +5,9 @@ from numpy.linalg import inv
 import App.func
 import App.const
 from App.const import nH, nL, H, L, time_step, time
-
+import pandas as pd
+desired_width = 320
+pd.set_option('display.width', desired_width)
 
 class Grid:
     def __init__(self):
@@ -121,7 +123,7 @@ class Grid:
         temps = []
         for node in self.nodes:
             temps.append(node.t)
-        temps = np.asarray(temps).reshape(4, 4)
+        temps = np.asarray(temps).reshape(App.const.nH, App.const.nL)
         print(temps)
         _max = np.max(temps)
         _min = np.min(temps)
