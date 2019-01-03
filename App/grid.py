@@ -6,8 +6,9 @@ import App.func
 import App.const
 from App.const import nH, nL, H, L, time_step, time
 import pandas as pd
-desired_width = 320
+desired_width = 640
 pd.set_option('display.width', desired_width)
+
 
 class Grid:
     def __init__(self):
