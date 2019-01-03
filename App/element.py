@@ -203,24 +203,19 @@ class Element:
         matrix *= self.alfa
         # first wall
         if App.func.check_border_cond(self.nodes[0], self.nodes[1]):
-            #det = abs((self.nodes[1].x - self.nodes[0].x)/2.0)
             matrix_h_bc[0:2, 0:2] = matrix_h_bc[0:2, 0:2] + matrix * det
         # second wall
         if App.func.check_border_cond(self.nodes[1], self.nodes[2]):
-            #det = abs((self.nodes[2].y - self.nodes[1].y)/2.0)
             matrix_h_bc[1:3, 1:3] = matrix_h_bc[1:3, 1:3] + matrix * det
         # third wall
         if App.func.check_border_cond(self.nodes[2], self.nodes[3]):
-            #det = abs((self.nodes[3].x - self.nodes[2].x)/2.0)
             matrix_h_bc[2:4, 2:4] = matrix_h_bc[2:4, 2:4] + matrix * det
         # fourth wall
         if App.func.check_border_cond(self.nodes[3], self.nodes[0]):
-            #det = abs((self.nodes[3].y - self.nodes[0].y)/2.0)
             matrix_h_bc[0, 0] = matrix_h_bc[0, 0] + matrix[0, 0] * det
             matrix_h_bc[0, 3] = matrix_h_bc[0, 3] + matrix[0, 1] * det
             matrix_h_bc[3, 0] = matrix_h_bc[3, 0] + matrix[1, 0] * det
             matrix_h_bc[3, 3] = matrix_h_bc[3, 3] + matrix[1, 1] * det
-        #print(matrix_h_bc)
         self.matrix_h_bc = matrix_h_bc
 
 
