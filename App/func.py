@@ -1,33 +1,5 @@
 import math
 import numpy as np
-import os
-import json
-
-def load_from_json(file):
-    try:
-        with open(file) as config:
-            data = json.load(config)
-        return data
-    except FileNotFoundError:
-        print("Nie znaleziono podanego pliku konfiguracyjnego!")
-        exit(-1)
-
-
-conf = os.getcwd() + "/config.json"
-data = load_from_json(conf)
-H = data["H"]
-L = data["L"]
-nH = data["nH"]
-nL = data["nL"]
-K = data["K"]
-C = data["C"]
-Ro = data["Ro"]
-alfa = data["alfa"]
-amb_temp = data["amb_temp"]
-time_step = data["time_step"]
-time = data["time"]
-temp_start = data["temp_start"]
-
 
 
 def n1_1d(ksi):
@@ -86,12 +58,6 @@ def n4_d_eta(ksi):
     return 0.25*(1-ksi)
 
 
-def check_border_cond(node1, node2):
-    if node1.br == node2.br == 1:
-        return True
-    return False
-
-
 REV_SQRT3 = 1/math.sqrt(3)
 KSI = [-REV_SQRT3, REV_SQRT3, REV_SQRT3, -REV_SQRT3]
 ETA = [-REV_SQRT3, -REV_SQRT3, REV_SQRT3, REV_SQRT3]
@@ -116,8 +82,6 @@ N4xN4 = np.outer(N4, N4)
 
 Nx_x_Nx = [N1xN1, N2xN2, N3xN3, N4xN4]
 
-# print(N1xN1)
-
 N1_1_1d = n1_1d(-REV_SQRT3)
 N2_1_1d = n2_1d(-REV_SQRT3)
 N1_2_1d = n1_1d(REV_SQRT3)
@@ -127,15 +91,9 @@ N1_1_1d_1 = n1_1d(-1)
 N1_1_1d_2 = n1_1d(1)
 
 N1_1d = [[n1_1d(1), 0, n1_1d(1), 0],
-       [0, n1_1d(1), 0, n1_1d(1)]]
+         [0, n1_1d(1), 0, n1_1d(1)]]
 N2_1d = [[0, n2_1d(1), 0, n2_1d(1)],
          [n2_1d(1), 0, n2_1d(1), 0]]
-
-#N1_1d = [[N1_1_1d_1, 0, N1_1_1d_1, 0],
-#       [0, N1_1_1d_1, 0, N1_1_1d_1]]
-
-#N2_1d =[[N1_1_1d_2, 0, N1_1_1d_2, 0],
-#       [0, N1_1_1d_2, 0, N1_1_1d_2]]
 
 N_1_1d = [N1_1_1d, N2_1_1d]
 N_2_1d = [N1_2_1d, N2_2_1d]
@@ -181,5 +139,18 @@ N_d_ETA = np.asmatrix(N_d_ETA)
 
 N_d_KSI_t = np.transpose(N_d_KSI)
 N_d_ETA_t = np.transpose(N_d_ETA)
+
+
+def is_border(x, y, max_x, max_y):
+    if x == max_x or y == max_y or x == 0 or y == 0:
+        return 1
+    return 0
+
+
+def check_border_cond(node1, node2):
+    if node1.br == node2.br == 1:
+        return True
+    return False
+
 
 
