@@ -218,10 +218,7 @@ class Element:
             matrix_h_bc[3, 3] = matrix_h_bc[3, 3] + matrix[1, 1] * det
         self.matrix_h_bc = matrix_h_bc
 
-
-
     def multiply_points_matrix_c(self):
-        #  self.matrixs_points_c
         for i in range(0, 4):
             self.matrixs_points_c.append(np.array(App.func.Nx_x_Nx[i]) * self.Ro * self.C * self.dets[i])
 
