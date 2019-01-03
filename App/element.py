@@ -130,7 +130,7 @@ class Element:
                                    App.func.N_d_ETA_t[i, j]
         # print(dn_dy)
 
-    def create_point_matrixes(self):  # Create points for matrix
+    def create_point_matrices(self):  # Create points for matrix
         for row in self.dn_dx:        # for every of points
             row = np.array(row)       # {dN/dx} x {dN/dx}^T
             col = row                 # and
@@ -176,7 +176,7 @@ class Element:
         self.div_matrix()
         self.create_matrix_dn_dx()
         self.create_matrix_dn_dy()
-        self.create_point_matrixes()
+        self.create_point_matrices()
         self.point_matrices_det()
         self.sum_four_point_matrices()
         self.multiply_sum_matrices()
@@ -229,7 +229,6 @@ class Element:
             for j in range(0, 4):
                 if App.func.check_border_cond(self.nodes[j], self.nodes[(j + 1) % 4]):
                     self.vector_p[j] += App.func.N1_1d[i][j] + App.func.N2_1d[i][j]
-
         self.vector_p *= App.const.amb_temp * App.const.alfa * det
 
     def print_matrix(self):
